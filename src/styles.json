@@ -1,0 +1,42 @@
+{
+  "White": {
+    "value": "#ffffff",
+    "type": "color"
+  },
+  "Primary-500": {
+    "value": "#026df1",
+    "type": "color"
+  },
+  "Primary-700": {
+    "value": "#025CCA",
+    "type": "color"
+  },
+  "Gray-500": {
+    "value": "#bec2c5",
+    "type": "color"
+  },
+  "Gray-300": {
+    "value": "#d4d7d9",
+    "type": "color"
+  },
+  "Gray-100": {
+    "value": "#e9ebec",
+    "type": "color"
+  },
+  "Gray-0": {
+    "value": "#f4f5f6",
+    "type": "color"
+  },
+  "Black": {
+    "value": "#333333",
+    "type": "color"
+  },
+  "Danger-500": {
+    "value": "#f22e1b",
+    "type": "color"
+  },
+  "Secondary-500": {
+    "value": "#f29d02",
+    "type": "color"
+  }
+}

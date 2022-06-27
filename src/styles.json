@@ -38,5 +38,8 @@
   "Secondary-500": {
     "value": "#f29d02",
     "type": "color"
+  },
+  "Danger-500":{
+    "value":"#ff4444"
   }
 }

@@ -1,6 +1,6 @@
 import React, { Children, ReactNode, useEffect } from "react"
 import styled from "styled-components"
-import { LoadIcon } from "../../assets/icons/Icons"
+import { LoadIcon, PlusIcon } from "../../assets/icons/Icons"
 import Styles from "../../styles.json"
 
 interface ButtonI {
@@ -89,4 +89,51 @@ const ButtonRegisterElement = styled.button`
     font-size: 0.875em;
     font-family: Montserrat-Regular;
     cursor: pointer;
+`
+
+export const ButtonSmallIcon: React.FunctionComponent<ButtonI> = ({
+    children,
+    onClick,
+    loading
+}: ButtonI) => {
+    return (
+        <ButtonIconSmallElement onClick={onClick ? () => onClick() : () => null}>
+            <>
+                {!loading && (
+                    <>
+                        {children}
+                        <PlusIcon color="white" width="18" height="18"/>
+                    </>
+                )}
+                {loading && (
+                    <>
+                        <LoadIcon width="20" height="20" stroke="3" color={Styles["Gray-500"].value}/>
+                    </>
+                )}
+
+            </>
+        </ButtonIconSmallElement>
+    )
+}
+
+const ButtonIconSmallElement = styled.button`
+    display:grid;
+    grid-template-columns: fit-content(100%) fit-content(100%);
+    column-gap: 4px;
+    height: 32px;
+    background-color: ${Styles["Primary-500"].value};
+    color: white;
+    border:none;
+    border-radius: 5px;
+    font-family: Montserrat-Regular;
+    cursor: pointer;
+    font-size: 0.75em;
+    align-items:center;
+    justify-content:center;
+    padding: 0px 16px;
+    
+    &:hover{    
+        background-color: ${Styles["Primary-700"].value}; 
+        transition: 0.4s;
+    }
 `

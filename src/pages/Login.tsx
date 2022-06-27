@@ -13,6 +13,7 @@ export default function Login() {
     const [password, setPassword] = useState<string>("")
     const [page, setPage] = useState<string>("login")
     const [loading, setLoading] = useState<boolean>(false)
+    const [dangerMessage, setDangerMessage] = useState<string>("")
 
     // estados do cadastro
     const [nameRegister, setNameRegister] = useState<string>("")
@@ -30,6 +31,10 @@ export default function Login() {
                 setLoading(false)
                 navigate("/dashboard/mytasks")
             } else {
+                setDangerMessage(result.data.message)
+                setTimeout(() => {
+                    setDangerMessage("")
+                }, 3000)
                 setLoading(false)
             }
         })
@@ -40,6 +45,11 @@ export default function Login() {
         if (nameRegister && emailRegister && passwordRegister && passwordVerifyRegister && passwordRegister === passwordVerifyRegister) {
             axios.post("/user/register", { email: emailRegister, password: passwordRegister, name: nameRegister }).then(result => {
                 setLoadingRegister(false)
+                setEmailRegister("")
+                setPasswordRegister("")
+                setPasswordVerifyRegister("")
+                setNameRegister("")
+                setPage("login")
             })
         } else {
             setLoadingRegister(false)
@@ -61,11 +71,16 @@ export default function Login() {
             <FormContainer>
                 <Logo>LOGO</Logo>
                 {page === "login" ?
-                    <Form>
+                    <Form id="formLogin">
                         <Title>Bem vindo de volta,</Title>
                         <Subtitle>Faça o login</Subtitle>
-                        <Input label="Email" onChange={(e) => setEmail(e.target.value)} />
-                        <Input label="Senha" type="password" onChange={(e) => setPassword(e.target.value)} />
+                        <Input label="Email" onChange={(e) => setEmail(e.target.value)} id="inputEmail" value={email} />
+                        <Input label="Senha" type="password" onChange={(e) => setPassword(e.target.value)} id="inputPassword" value={password} />
+                        {dangerMessage !== "" && (
+                            <>
+                                <DangerMessage>{dangerMessage}</DangerMessage>
+                            </>
+                        )}
                         <PrimaryMediumButton onClick={auth} loading={loading}>Entrar</PrimaryMediumButton>
                         <Or>Ou</Or>
                         <RegisterButton onClick={changePage}>Cadastre-se</RegisterButton>
@@ -73,10 +88,10 @@ export default function Login() {
                     :
                     <Form>
                         <Title>Cadastro</Title>
-                        <Input label="Nome" onChange={(e) => setNameRegister(e.target.value)} />
-                        <Input label="Email" onChange={(e) => setEmailRegister(e.target.value)} />
-                        <Input label="Senha" type="password" onChange={(e) => setPasswordRegister(e.target.value)} />
-                        <Input label="Confirmar senha" type="password" onChange={(e) => setPasswordVerifyRegister(e.target.value)} />
+                        <Input label="Nome" onChange={(e) => setNameRegister(e.target.value)} value={nameRegister} />
+                        <Input label="Email" onChange={(e) => setEmailRegister(e.target.value)} value={emailRegister} />
+                        <Input label="Senha" type="password" onChange={(e) => setPasswordRegister(e.target.value)} value={passwordRegister} />
+                        <Input label="Confirmar senha" type="password" onChange={(e) => setPasswordVerifyRegister(e.target.value)} value={passwordVerifyRegister} />
                         <PrimaryMediumButton onClick={register} loading={loadingRegister}>Salvar</PrimaryMediumButton>
                         <AlreadyHaveAccount>Ja possui uma conta ? <span onClick={() => changePage()}>Entrar</span></AlreadyHaveAccount>
                     </Form>
@@ -101,6 +116,11 @@ const FormContainer = styled.div`
     padding: 30px 40px;
     position: relative;
     align-items:center;
+
+    @media only screen and (min-width: 1024px){
+        boxing-sizing: border-box;
+        width: 20vw;
+    }
 `
 
 const Illustration = styled.div`
@@ -158,4 +178,10 @@ const AlreadyHaveAccount = styled.span`
         color: ${Styles['Primary-500'].value};
         cursor:pointer;
     }
+`
+
+const DangerMessage = styled.span`
+    font-family: Montserrat-Regular;
+    color: ${Styles['Danger-500'].value};
+    font-size: 0.875em;
 `

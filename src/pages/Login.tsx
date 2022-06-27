@@ -5,6 +5,7 @@ import { Input } from '../components/Inputs/Inputs';
 import Styles from "../styles.json"
 import axios from "../axios/axios"
 import { NavigateFunction, useNavigate } from 'react-router-dom';
+import Task from '../components/Task/Task';
 
 export default function Login() {
 
@@ -96,6 +97,7 @@ export default function Login() {
                         <AlreadyHaveAccount>Ja possui uma conta ? <span onClick={() => changePage()}>Entrar</span></AlreadyHaveAccount>
                     </Form>
                 }
+                
             </FormContainer>
         </Container>
     )

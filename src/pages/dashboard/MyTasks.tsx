@@ -6,7 +6,6 @@ import { ButtonSmallIcon } from "../../components/Buttons/Buttons"
 import Styles from "../../styles.json"
 import { PlusIcon } from "../../assets/icons/Icons"
 import Task from "../../components/Task/Task"
-import { useSprings, animated } from 'react-spring'
 
 export default function MyTasks() {
     return (

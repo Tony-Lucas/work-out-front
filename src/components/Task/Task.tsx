@@ -1,19 +1,23 @@
-import React, { DragEvent, MouseEvent } from "react"
+import React, { DragEvent, MouseEvent, StyleHTMLAttributes } from "react"
 import Styles from "../../styles.json"
 import styled from "styled-components"
 import { BalonIcon, OptionsIcon } from "../../assets/icons/Icons";
 import Avatar from "../Avatar/Avatar";
+import { useSpring,animated } from "react-spring"
 
-interface ITask{
+interface TaskI{
     title?: string;
     foto?: string;
     usuario?: string;
     contagem?: number;
+    style?: object,
+    bindPos?: any,
+    id: number
 }
 
-export default function Task(props: ITask){
+export default function Task(props: TaskI){
     return(
-        <Container >
+        <animated.div style={{...props.style}} {...props.bindPos()} id={props.id}>
             <Title>
                 {props.title}
                 <Options>
@@ -27,14 +31,14 @@ export default function Task(props: ITask){
                         {props.usuario}
                     </Nome>
                 </Perfil>
-                <Contagem>
+                <ComentsNumber>
                     <BalonIcon/>
                     {props.contagem}
-                </Contagem>
+                </ComentsNumber>
                 
             </Body>
 
-        </Container>
+        </animated.div>
     )
 }
 
@@ -42,6 +46,8 @@ const Container = styled.div`
     background-color: ${Styles.White.value};
     border-radius: 5px;
     cursor:pointer;
+    border: 1px solid ${Styles["Gray-100"].value};
+    user-select: none;
 `
 const Title = styled.span`
     font-size: 0.75em;
@@ -51,6 +57,7 @@ const Title = styled.span`
     align-items: center;
     justify-content: space-between;
     padding: 12px;
+    border-bottom: 1px solid ${Styles["Gray-100"].value};
 `
 const Options = styled.button`
     background-color: transparent;
@@ -71,7 +78,7 @@ const Nome = styled.span`
     font-family: Montserrat-Regular;
     color: ${Styles.Black.value};
 `
-const Contagem = styled.span`
+const ComentsNumber = styled.span`
     display: flex;
     align-items: center;
     margin-top: 4px;

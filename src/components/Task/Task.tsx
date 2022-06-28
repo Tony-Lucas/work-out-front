@@ -1,9 +1,9 @@
-import React, { DragEvent, MouseEvent, StyleHTMLAttributes } from "react"
+import React, { useState } from "react"
 import Styles from "../../styles.json"
 import styled from "styled-components"
 import { BalonIcon, OptionsIcon } from "../../assets/icons/Icons";
 import Avatar from "../Avatar/Avatar";
-import { useSpring,animated } from "react-spring"
+import TaskOptions from "../TaskOptions/TaskOptions";
 
 interface TaskI{
     title?: string;
@@ -16,12 +16,20 @@ interface TaskI{
 }
 
 export default function Task(props: TaskI){
+
+    const [showOption, setShowOption] = useState<boolean>(false)
+
+    const showOptionHandle = () => {
+        setShowOption(!showOption)
+    }
+
     return(
-        <animated.div style={{...props.style}} {...props.bindPos()} id={props.id}>
+        <Container style={{...props.style}} {...props.bindPos()} id={props.id}>
             <Title>
                 {props.title}
-                <Options>
+                <Options onClick={()=> showOptionHandle()}>
                     <OptionsIcon/>
+                    <TaskOptions visible={showOption}/>
                 </Options>
             </Title>
             <Body>
@@ -37,8 +45,8 @@ export default function Task(props: TaskI){
                 </ComentsNumber>
                 
             </Body>
-
-        </animated.div>
+            
+        </Container>
     )
 }
 
@@ -64,6 +72,7 @@ const Options = styled.button`
     border: none;
     margin: 0;
     padding: 0;
+    cursor: pointer;
 `
 const Body = styled.div`
     padding: 12px;

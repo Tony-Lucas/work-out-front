@@ -7,12 +7,15 @@ import Styles from "../../styles.json"
 import { PlusIcon } from "../../assets/icons/Icons"
 import Task from "../../components/Task/Task"
 import { useDrag } from "@use-gesture/react"
+import Modal from "../../components/Modal/Modal"
 
 
 export default function MyTasks() {
 
 
     const [tasks, setTasks] = useState([{ title: "Tarefa alururu" }, { title: "Tarefa alururu" }, { title: "Tarefa alururu" }])
+    const [showModal, setShowModal] = useState<boolean>(true)
+    const [animation, setAnimation] = useState<string>('slide-in')
 
     const bindTaskPos = useDrag((params) => {
        
@@ -53,7 +56,10 @@ export default function MyTasks() {
                 </BodyContainer>
             </DesktopContainer>
             <MobileContainer title="My tasks">
-
+                {
+                    showModal ? <Modal animation={animation}>alurururur</Modal> : null
+                }
+            
             </MobileContainer>
         </>
     )

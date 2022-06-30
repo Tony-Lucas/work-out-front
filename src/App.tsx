@@ -5,14 +5,11 @@ import axios from "./axios/axios"
 import RoutesPage from './pages/RoutesPage';
 
 function App() {
-
   return (
-    
       <BrowserRouter>
         <GlobalStyles />
         <RoutesPage />
       </BrowserRouter>
-   
   );
 }
 

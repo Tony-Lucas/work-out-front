@@ -10,7 +10,8 @@ import Modal from "../../components/Modal/Modal"
 
 export default function MyTasks() {
 
-    const [tasks, setTasks] = useState([{ title: "Tarefa alururu",id:0 }, { title: "Tarefa alururu",id:1 }, { title: "Tarefa alururu",id:2 }])
+
+    const [tasks, setTasks] = useState([{ title: "Tarefa alururu" }, { title: "Tarefa alururu" }, { title: "Tarefa alururu" }])
     const [showModal, setShowModal] = useState<boolean>(false)
     const [animation, setAnimation] = useState<string>('slide-in')
 

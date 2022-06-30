@@ -1,21 +1,23 @@
-import React, { useState } from "react"
+import React, { DragEvent, useState } from "react"
 import Styles from "../../styles.json"
 import styled from "styled-components"
 import { BalonIcon, OptionsIcon } from "../../assets/icons/Icons";
 import Avatar from "../Avatar/Avatar";
 import TaskOptions from "../TaskOptions/TaskOptions";
-
-interface TaskI{
+import Skeleton from "react-loading-skeleton"
+import 'react-loading-skeleton/dist/skeleton.css'
+import { useDrag } from "react-dnd"
+interface TaskI {
     title?: string;
     foto?: string;
     usuario?: string;
     contagem?: number;
     style?: object,
     bindPos?: any,
-    id: number
+    id?: number
 }
 
-export default function Task(props: TaskI){
+export default function Task(props: TaskI) {
 
     const [showOption, setShowOption] = useState<boolean>(false)
 
@@ -23,40 +25,43 @@ export default function Task(props: TaskI){
         setShowOption(!showOption)
     }
 
-    return(
-        <Container style={{...props.style}} {...props.bindPos()} id={props.id}>
+    return (
+        <Container>
             <Title>
                 {props.title}
-                <Options onClick={()=> showOptionHandle()}>
-                    <OptionsIcon/>
-                    <TaskOptions visible={showOption}/>
+                <Options onClick={() => showOptionHandle()}>
+                    <OptionsIcon />
+                    <TaskOptions visible={showOption} />
                 </Options>
             </Title>
             <Body>
                 <Perfil>
-                    <Avatar foto={props.foto}/>
+                    <Avatar foto={props.foto} />
                     <Nome>
                         {props.usuario}
                     </Nome>
                 </Perfil>
                 <ComentsNumber>
-                    <BalonIcon/>
+                    <BalonIcon />
                     {props.contagem}
                 </ComentsNumber>
-                
+
             </Body>
-            
         </Container>
     )
 }
 
 const Container = styled.div`
-    background-color: ${Styles.White.value};
+    position: relative;
+    touch-action:pan-y;
+    background-color: #fff;
     border-radius: 5px;
-    cursor:pointer;
+    cursor: pointer;
     border: 1px solid ${Styles["Gray-100"].value};
     user-select: none;
 `
+
+
 const Title = styled.span`
     font-size: 0.75em;
     color: ${Styles.Black.value};

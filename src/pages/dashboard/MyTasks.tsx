@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { MouseEvent, useState } from "react"
 import { BodyContainer, DesktopContainer, MobileContainer } from "../../layout/layout"
 import styled from "styled-components"
 import { Input, SearchInput } from "../../components/Inputs/Inputs"
@@ -6,22 +6,14 @@ import { ButtonSmallIcon } from "../../components/Buttons/Buttons"
 import Styles from "../../styles.json"
 import { PlusIcon } from "../../assets/icons/Icons"
 import Task from "../../components/Task/Task"
-import { useDrag } from "@use-gesture/react"
 import Modal from "../../components/Modal/Modal"
-
 
 export default function MyTasks() {
 
-
-    const [tasks, setTasks] = useState([{ title: "Tarefa alururu" }, { title: "Tarefa alururu" }, { title: "Tarefa alururu" }])
-    const [showModal, setShowModal] = useState<boolean>(true)
+    const [tasks, setTasks] = useState([{ title: "Tarefa alururu",id:0 }, { title: "Tarefa alururu",id:1 }, { title: "Tarefa alururu",id:2 }])
+    const [showModal, setShowModal] = useState<boolean>(false)
     const [animation, setAnimation] = useState<string>('slide-in')
 
-    const bindTaskPos = useDrag((params) => {
-       
-     
-    })
-    
     return (
         <>
             <DesktopContainer title="My tasks">
@@ -33,14 +25,14 @@ export default function MyTasks() {
                     <TasksContainer>
                         <TaskColumn>
                             <TitleColumn>To Do</TitleColumn>
-                            <NewTask><PlusIcon width="20" height="20" color={Styles["Primary-500"].value} /> Nova Tafera</NewTask>
-                            {tasks.map((task,index) => {
+                            <NewTask><PlusIcon width="20" height="20" color={Styles["Primary-500"].value} />Nova Tafera</NewTask>
+                            {tasks.map((task, index) => {
                                 return (
-                                    <Task title={task.title} bindPos={bindTaskPos} style={{ position: "relative" }} id={index} />
+                                    <Task title={task.title} id={index} />
                                 )
                             })}
                         </TaskColumn>
-                        <TaskColumn>
+                        <TaskColumn >
                             <TitleColumn>Doing</TitleColumn>
                             <NewTask><PlusIcon width="20" height="20" color={Styles["Primary-500"].value} /> Nova Tafera</NewTask>
                         </TaskColumn>
@@ -59,7 +51,6 @@ export default function MyTasks() {
                 {
                     showModal ? <Modal animation={animation}>alurururur</Modal> : null
                 }
-            
             </MobileContainer>
         </>
     )

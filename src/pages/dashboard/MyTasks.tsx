@@ -14,7 +14,7 @@ export default function MyTasks() {
 
 
     const [tasks, setTasks] = useState([{ title: "Tarefa alururu" }, { title: "Tarefa alururu" }, { title: "Tarefa alururu" }])
-    const [showModal, setShowModal] = useState<boolean>(true)
+    const [showModal, setShowModal] = useState<boolean>(false)
     const [animation, setAnimation] = useState<string>('slide-in')
 
     const bindTaskPos = useDrag((params) => {

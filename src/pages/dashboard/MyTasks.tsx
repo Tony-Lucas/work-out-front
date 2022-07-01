@@ -6,7 +6,6 @@ import { ButtonSmallIcon } from "../../components/Buttons/Buttons"
 import Styles from "../../styles.json"
 import { PlusIcon } from "../../assets/icons/Icons"
 import Task from "../../components/Task/Task"
-import { useDrag } from "@use-gesture/react"
 import Modal from "../../components/Modal/Modal"
 import { Select } from "../../components/SelectOption/Select"
 import axios from '../../axios/axios';
@@ -30,11 +29,6 @@ export default function MyTasks({user}: IMyTasks) {
     const [showModal, setShowModal] = useState<boolean>(true)
     const [animation, setAnimation] = useState<string>('slide-in')
 
-    const bindTaskPos = useDrag((params) => {
-       
-     
-    })
-    
     return (
         <>
             <DesktopContainer title="My tasks">
@@ -46,14 +40,14 @@ export default function MyTasks({user}: IMyTasks) {
                     <TasksContainer>
                         <TaskColumn>
                             <TitleColumn>To Do</TitleColumn>
-                            <NewTask><PlusIcon width="20" height="20" color={Styles["Primary-500"].value} /> Nova Tafera</NewTask>
-                            {tasks.map((task,index) => {
+                            <NewTask><PlusIcon width="20" height="20" color={Styles["Primary-500"].value} />Nova Tafera</NewTask>
+                            {tasks.map((task, index) => {
                                 return (
-                                    <Task title={task.title} bindPos={bindTaskPos} style={{ position: "relative" }} id={index} />
+                                    <Task title={task.title} id={index} />
                                 )
                             })}
                         </TaskColumn>
-                        <TaskColumn>
+                        <TaskColumn >
                             <TitleColumn>Doing</TitleColumn>
                             <NewTask><PlusIcon width="20" height="20" color={Styles["Primary-500"].value} /> Nova Tafera</NewTask>
                         </TaskColumn>
@@ -72,7 +66,6 @@ export default function MyTasks({user}: IMyTasks) {
                 {
                     showModal ? <Modal animation={animation}><EditableInput value="primeiro" onChange={()=>{}}/><Select label="prioridade" options={['primeiro', 'segundo']}/></Modal> : null
                 }
-            
             </MobileContainer>
         </>
     )

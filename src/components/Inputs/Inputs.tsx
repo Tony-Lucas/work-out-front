@@ -98,3 +98,24 @@ const InputSearch = styled.input`
         outline: none;
     }
 `
+
+export const EditableInput: React.FunctionComponent<InputI> = ({ label,
+    placeholder,
+    type,
+    onChange,
+    id,
+    value,}: InputI) =>{
+        return(
+            <Editable value={value}/>
+        )
+}
+
+const Editable = styled.input`
+    font-size: 1.25em;
+    color: ${Styles.Black.value};
+    font-family: Montserrat-Bold;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+`

@@ -1,20 +1,33 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { BodyContainer, DesktopContainer, MobileContainer } from "../../layout/layout"
 import styled from "styled-components"
-import { Input, SearchInput } from "../../components/Inputs/Inputs"
+import { EditableInput, Input, SearchInput } from "../../components/Inputs/Inputs"
 import { ButtonSmallIcon } from "../../components/Buttons/Buttons"
 import Styles from "../../styles.json"
 import { PlusIcon } from "../../assets/icons/Icons"
 import Task from "../../components/Task/Task"
 import { useDrag } from "@use-gesture/react"
 import Modal from "../../components/Modal/Modal"
+import { Select } from "../../components/SelectOption/Select"
+import axios from '../../axios/axios';
+import { IUser } from "../../interfaces/interface"
 
+interface IMyTasks{
+    user: IUser;
+}
 
-export default function MyTasks() {
+export default function MyTasks({user}: IMyTasks) {
+
+    useEffect(()=>{
+        axios.get(`/task/all/${user.id}`)
+        .then(result => {
+            console.log(result)
+        })
+    }, [])
 
 
     const [tasks, setTasks] = useState([{ title: "Tarefa alururu" }, { title: "Tarefa alururu" }, { title: "Tarefa alururu" }])
-    const [showModal, setShowModal] = useState<boolean>(false)
+    const [showModal, setShowModal] = useState<boolean>(true)
     const [animation, setAnimation] = useState<string>('slide-in')
 
     const bindTaskPos = useDrag((params) => {
@@ -57,7 +70,7 @@ export default function MyTasks() {
             </DesktopContainer>
             <MobileContainer title="My tasks">
                 {
-                    showModal ? <Modal animation={animation}>alurururur</Modal> : null
+                    showModal ? <Modal animation={animation}><EditableInput value="primeiro" onChange={()=>{}}/><Select label="prioridade" options={['primeiro', 'segundo']}/></Modal> : null
                 }
             
             </MobileContainer>

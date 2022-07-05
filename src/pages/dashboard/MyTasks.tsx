@@ -1,14 +1,28 @@
-import React, { DragEvent, MouseEvent, useState } from "react"
+import React, { DragEvent, useEffect, useState } from "react"
 import { BodyContainer, DesktopContainer, MobileContainer } from "../../layout/layout"
 import styled from "styled-components"
-import { Input, SearchInput } from "../../components/Inputs/Inputs"
+import { EditableInput, Input, SearchInput } from "../../components/Inputs/Inputs"
 import { ButtonSmallIcon } from "../../components/Buttons/Buttons"
 import Styles from "../../styles.json"
 import { PlusIcon } from "../../assets/icons/Icons"
 import Task, { TaskI } from "../../components/Task/Task"
 import Modal from "../../components/Modal/Modal"
+import { Select } from "../../components/SelectOption/Select"
+import axios from '../../axios/axios';
+import { IUser } from "../../interfaces/interface"
 
-export default function MyTasks() {
+interface IMyTasks{
+    user: IUser;
+}
+
+export default function MyTasks({user}: IMyTasks) {
+
+    useEffect(()=>{
+        axios.get(`/task/all/${user.id}`)
+        .then(result => {
+            console.log(result)
+        })
+    }, [])
 
     const [tasks, setTasks] = useState([{ title: "Tarefa alururu", id: 1 }, { title: "Tarefa alururu", id: 2 }, { title: "Tarefa alururu", id: 3 }])
     const [showModal, setShowModal] = useState<boolean>(false)

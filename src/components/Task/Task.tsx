@@ -4,7 +4,6 @@ import styled from "styled-components"
 import { BalonIcon, OptionsIcon } from "../../assets/icons/Icons";
 import Avatar from "../Avatar/Avatar";
 import TaskOptions from "../TaskOptions/TaskOptions";
-import Skeleton from "react-loading-skeleton"
 import 'react-loading-skeleton/dist/skeleton.css'
 
 import { useSpring,animated } from "react-spring";

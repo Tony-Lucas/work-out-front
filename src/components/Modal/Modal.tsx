@@ -1,6 +1,7 @@
 import React, { ReactNode, useState } from "react"
 import Styles from "../../styles.json"
 import styled, {keyframes} from "styled-components"
+import { CloseIcon } from "../../assets/icons/Icons";
 
 interface IModal{
     children?: ReactNode;
@@ -12,6 +13,9 @@ export default function Modal(props: IModal){
         <Container>
             <Background animation={props.animation}/>
             <Main animation={props.animation}>
+                <CloseButton>
+                    <CloseIcon/>
+                </CloseButton>  
                 {props.children}
             </Main>
         </Container>
@@ -80,9 +84,23 @@ const Container = styled.div`
 `
 
 const Main = styled.div<{animation: string}>`
-    background-color: white;
+    background-color: red;
+    position: relative;
     border-radius: 5px;
-    padding: 30px;
+    padding: 32px;
     z-index: 2;
     animation: ${props=> props.animation === 'slide-in' ? SlideIn : SlideOut} 0.5s forwards;
+    min-width: 300px;
+`
+
+const CloseButton = styled.button`
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    width: fit-content;
+    height: fit-content;
+    box-sizing: border-box;
 `

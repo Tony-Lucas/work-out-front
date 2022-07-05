@@ -137,6 +137,15 @@ export const TrashIcon: FunctionComponent<IconAttributes> = ({width, height}) =>
     )
 }
 
+export const CloseIcon: FunctionComponent<IconAttributes> = ({width, height}) =>{
+    return(
+        <svg width={width || "24"} height={height || "24"} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="24" height="24" rx="5" fill="#F4F5F6"/>
+            <path d="M16 8L8 16" stroke="#333333" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M8 8L16 16" stroke="#333333" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    )
+}
 
 
 

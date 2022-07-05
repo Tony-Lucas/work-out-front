@@ -28,6 +28,11 @@ export const DesktopContainer: React.FunctionComponent<DesktopContainerI> = ({
 const ContainerDesktop = styled.div`
     display:grid;
     grid-template-columns: fit-content(100%) 1fr;
+    
+    @media screen and (max-width: 1024px){
+        display:none;
+    }
+    
 `
 
 const Main = styled.div`

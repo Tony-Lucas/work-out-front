@@ -1,19 +1,43 @@
-import React, { MouseEvent, useState } from "react"
+import React, { DragEvent, MouseEvent, useState } from "react"
 import { BodyContainer, DesktopContainer, MobileContainer } from "../../layout/layout"
 import styled from "styled-components"
 import { Input, SearchInput } from "../../components/Inputs/Inputs"
 import { ButtonSmallIcon } from "../../components/Buttons/Buttons"
 import Styles from "../../styles.json"
 import { PlusIcon } from "../../assets/icons/Icons"
-import Task from "../../components/Task/Task"
+import Task, { TaskI } from "../../components/Task/Task"
 import Modal from "../../components/Modal/Modal"
 
 export default function MyTasks() {
 
-
-    const [tasks, setTasks] = useState([{ title: "Tarefa alururu" }, { title: "Tarefa alururu" }, { title: "Tarefa alururu" }])
+    const [tasks, setTasks] = useState([{ title: "Tarefa alururu", id: 1 }, { title: "Tarefa alururu", id: 2 }, { title: "Tarefa alururu", id: 3 }])
     const [showModal, setShowModal] = useState<boolean>(false)
     const [animation, setAnimation] = useState<string>('slide-in')
+    const [taskIsDragging, setTaskIsDragging] = useState<number>()
+
+    const [cardDown, setCardDown] = useState<any>()
+
+    const onDragStart = (id: number) => {
+        setTaskIsDragging(id)
+    }
+
+    const onDragOver = (e: DragEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        const taskDragging: any = document.querySelector(`#card-${taskIsDragging}`)
+        e.currentTarget.appendChild(taskDragging)
+    }
+
+    const onDragLeave = (e: DragEvent<HTMLDivElement>) => {
+        e.preventDefault()
+        const taskDragging: any = document.querySelector(`#card-${taskIsDragging}`)
+
+    }
+
+    const onDropCard = (e: any) => {
+        e.preventDefault()
+        const data = e.dataTransfer.getData("text")
+        console.log(data)
+    }
 
     return (
         <>
@@ -24,24 +48,24 @@ export default function MyTasks() {
                         <ButtonSmallIcon onClick={() => null}>Nova Tarefa</ButtonSmallIcon>
                     </ToolContainer>
                     <TasksContainer>
-                        <TaskColumn>
+                        <TaskColumn onDragOver={(e: DragEvent<HTMLDivElement>) => onDragOver(e)} onDragLeave={(e: DragEvent<HTMLDivElement>) => onDragLeave(e)}>
                             <TitleColumn>To Do</TitleColumn>
                             <NewTask><PlusIcon width="20" height="20" color={Styles["Primary-500"].value} />Nova Tafera</NewTask>
                             {tasks.map((task, index) => {
                                 return (
-                                    <Task title={task.title} id={index} />
+                                    <Task title={task.title} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} />
                                 )
                             })}
                         </TaskColumn>
-                        <TaskColumn >
+                        <TaskColumn onDragOver={(e: DragEvent<HTMLDivElement>) => onDragOver(e)} onDrop={(e: any) => onDropCard(e)} onDragLeave={(e: DragEvent<HTMLDivElement>) => onDragLeave(e)}>
                             <TitleColumn>Doing</TitleColumn>
                             <NewTask><PlusIcon width="20" height="20" color={Styles["Primary-500"].value} /> Nova Tafera</NewTask>
                         </TaskColumn>
-                        <TaskColumn>
+                        <TaskColumn onDragOver={(e: DragEvent<HTMLDivElement>) => onDragOver(e)} onDragLeave={(e: DragEvent<HTMLDivElement>) => onDragLeave(e)}>
                             <TitleColumn>Done</TitleColumn>
                             <NewTask><PlusIcon width="20" height="20" color={Styles["Primary-500"].value} /> Nova Tafera</NewTask>
                         </TaskColumn>
-                        <TaskColumn>
+                        <TaskColumn onDragOver={(e: DragEvent<HTMLDivElement>) => onDragOver(e)} onDragLeave={(e: DragEvent<HTMLDivElement>) => onDragLeave(e)}>
                             <TitleColumn>Review</TitleColumn>
                             <NewTask><PlusIcon width="20" height="20" color={Styles["Primary-500"].value} /> Nova Tafera</NewTask>
                         </TaskColumn>
@@ -49,25 +73,56 @@ export default function MyTasks() {
                 </BodyContainer>
             </DesktopContainer>
             <MobileContainer title="My tasks">
-                {
-                    showModal ? <Modal animation={animation}>alurururur</Modal> : null
-                }
+                <BodyContainer>
+                    <ToolContainer>
+                        <SearchInput onChange={() => null} />
+                    </ToolContainer>
+                    <TasksContainer>
+                        <TaskColumn>
+                            <TitleColumn>To Do</TitleColumn>
+                            <NewTask><PlusIcon width="20" height="20" color={Styles["Primary-500"].value} />Nova Tafera</NewTask>
+                            {tasks.map((task, index) => {
+                                return (
+                                    <Task title={task.title} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={() => console.log("alurururu")}/>
+                                )
+                            })}
+                        </TaskColumn>
+                    </TasksContainer>
+                </BodyContainer>
             </MobileContainer>
         </>
     )
 }
 
 const ToolContainer = styled.div`
-    display:grid;
-    grid-template-columns: fit-content(100%) fit-content(100%);
-    justify-content:space-between;
-    align-items:center;
+    
+    @media screen and (min-width: 1024px){
+        display:grid;
+        grid-template-columns: fit-content(100%) fit-content(100%);
+        justify-content:space-between;
+        align-items:center;
+    }
+
+    @media screen and (max-width: 1024px){
+        display:grid;
+        grid-template-columns: 1fr;
+    }
 `
 
 const TasksContainer = styled.div`
-    display:grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    column-gap: 24px;
+   
+    @media screen and (min-width: 1024px){
+        display:grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+        column-gap: 24px;
+    }
+
+    @media screen and (max-width: 1024px){
+        display:grid;
+        grid-template-columns: calc(100vw - 48px) calc(100vw - 48px) calc(100vw - 48px) calc(100vw - 48px);
+        column-gap: 24px;
+        height: fit-content;
+    }
 `
 
 const TaskColumn = styled.div`

@@ -6,15 +6,20 @@ import Avatar from "../Avatar/Avatar";
 import TaskOptions from "../TaskOptions/TaskOptions";
 import Skeleton from "react-loading-skeleton"
 import 'react-loading-skeleton/dist/skeleton.css'
-import { useDrag } from "react-dnd"
-interface TaskI {
+
+import { useSpring,animated } from "react-spring";
+import { useDrag } from "@use-gesture/react";
+export interface TaskI {
     title?: string;
     foto?: string;
     usuario?: string;
     contagem?: number;
     style?: object,
     bindPos?: any,
-    id?: number
+    id: number,
+    setCardDown: any,
+    cardDown: any,
+    onDragStart: (id: number) => void 
 }
 
 export default function Task(props: TaskI) {
@@ -26,7 +31,7 @@ export default function Task(props: TaskI) {
     }
 
     return (
-        <Container>
+        <Container draggable="true" onDragStart={props.onDragStart(props.id)} id={`card-${props.id}`}>
             <Title>
                 {props.title}
                 <Options onClick={() => showOptionHandle()}>
@@ -45,7 +50,6 @@ export default function Task(props: TaskI) {
                     <BalonIcon />
                     {props.contagem}
                 </ComentsNumber>
-
             </Body>
         </Container>
     )

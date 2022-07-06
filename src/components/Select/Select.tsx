@@ -3,38 +3,37 @@ import Styles from "../../styles.json"
 import styled from "styled-components"
 import { ArrowDownIcon } from "../../assets/icons/Icons";
 
-interface IOption{
-    value: string,
-    label: string
-}
+export type priority = "Baixa" | "Média" | "Alta"
+export type status = "To Do" | "Doing" | "Done" | "Review"
+type defaultOption = "Selecione uma opção"
 
 interface ISelect {
     label?: string;
-    options: IOption[],
-    value: string,
-    onChange: (value: string) => void
+    options: priority[] | status[],
+    value: priority | status | defaultOption,
+    onChange: (value: any) => void
 }
 
 export const Select = (props: ISelect) => {
 
-    const [selected, setSelected] = useState<IOption>({ value: "default", label: "Selecione uma opção" })
+    const [selected, setSelected] = useState<priority | status | defaultOption>(props.value || "Selecione uma opção")
     const [active, setActive] = useState(false)
 
-    const onChange = (option: IOption) => {
+    const onChange = (option: priority | status ) => {
         setSelected(option)
         setActive(false)
-        props.onChange(option.value)
+        props.onChange(option)
     }
 
     return (
         <Container active={active}>
             <Label>{props.label}</Label>
-            <SelectHeader onClick={() => active ? setActive(false) : setActive(true)} active={active}>{selected.label}<button style={{cursor:"pointer"}}><ArrowDownIcon /></button></SelectHeader>
+            <SelectHeader onClick={() => active ? setActive(false) : setActive(true)} active={active}>{selected}<button style={{cursor:"pointer"}}><ArrowDownIcon /></button></SelectHeader>
             {active && (
                 <OptionsContainer active={active}>
                     {props.options.map(option => {
                         return(
-                            <Option onClick={() => onChange(option)}>{option.label}</Option>
+                            <Option onClick={() => onChange(option)}>{option}</Option>
                         )
                     })}
                 </OptionsContainer>

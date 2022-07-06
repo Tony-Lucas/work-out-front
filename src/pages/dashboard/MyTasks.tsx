@@ -7,7 +7,7 @@ import Styles from "../../styles.json"
 import { PlusIcon } from "../../assets/icons/Icons"
 import Task, { TaskI } from "../../components/Task/Task"
 import Modal from "../../components/Modal/Modal"
-import { Select } from "../../components/Select/Select"
+import { priority, Select, status } from "../../components/Select/Select"
 import axios from '../../axios/axios';
 import { ITask, IUser } from "../../interfaces/interface"
 
@@ -28,13 +28,15 @@ export default function MyTasks({ user }: IMyTasks) {
 
     const [tasks, setTasks] = useState<ITask[]>([])
     const [showModal, setShowModal] = useState<boolean>(false)
+    const [showModalEdit,setShowModalEdit] = useState(false)
+    const [selectEdit,setSelectedEdit] = useState<ITask>({id: 0,description: "",priority:"Baixa",status:"To Do",userId: user.id,createdAt:"",updatedAt:""})
     const [animation, setAnimation] = useState<string>('slide-in')
     const [taskIsDragging, setTaskIsDragging] = useState<number>(0)
     const [cardDown, setCardDown] = useState<any>()
 
     const [titleNewTask, setTitleNewTask] = useState<string>("")
-    const [priorityNewTask, setPriorityNewTask] = useState<string>("")
-    const [statusNewTask, setStatusNewTask] = useState<string>("")
+    const [priorityNewTask, setPriorityNewTask] = useState<priority | status>("Baixa")
+    const [statusNewTask, setStatusNewTask] = useState<status | priority>("To Do")
 
     const onDragStart = (id: number) => {
         setTaskIsDragging(id)
@@ -68,10 +70,25 @@ export default function MyTasks({ user }: IMyTasks) {
         }
     }
 
+    const updateTask = (): void => {
+        if (selectEdit) {
+            axios.put(`/task`, {...selectEdit}).then(result => {
+                console.log(result)
+            })
+        }
+    }
+
     const onDelete = (id: number) => {
         axios.delete(`/task/${id}`).then(result => {
             console.log(result)
         })
+    }
+
+    const toggleModalEdit = (id: number) => {
+        axios.get(`/task/${id}`).then(result => {
+            setSelectedEdit(result.data.task)
+            setShowModalEdit(true)
+        }) 
     }
 
     return (
@@ -90,7 +107,7 @@ export default function MyTasks({ user }: IMyTasks) {
                                 return (
                                     <>
                                         {task.status === "To Do" && (
-                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)}/>
+                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)}/>
                                         )}
                                     </>
                                 )
@@ -103,7 +120,7 @@ export default function MyTasks({ user }: IMyTasks) {
                                 return (
                                     <>
                                         {task.status === "Doing" && (
-                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)}/>
+                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)}/>
                                         )}
                                     </>
                                 )
@@ -116,7 +133,7 @@ export default function MyTasks({ user }: IMyTasks) {
                                 return (
                                     <>
                                         {task.status === "Done" && (
-                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)}/>
+                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)}/>
                                         )}
                                     </>
                                 )
@@ -129,7 +146,7 @@ export default function MyTasks({ user }: IMyTasks) {
                                 return (
                                     <>
                                         {task.status === "Review" && (
-                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)}/>
+                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)}/>
                                         )}
                                     </>
                                 )
@@ -156,9 +173,19 @@ export default function MyTasks({ user }: IMyTasks) {
                 <Modal animation={animation} setShow={setShowModal}>
                     <div style={{ display: "grid", rowGap: "16px" }}>
                         <EditableInput onChange={(e) => setTitleNewTask(e.target.value)} value={titleNewTask} placeholder="Sem Título" />
-                        <Select options={[{ value: "Baixa", label: "Baixa" }, { value: "Média", label: "Média" }, { value: "Alta", label: "Alta" }]} label="Prioridade" value={priorityNewTask} onChange={(value: string) => setPriorityNewTask(value)} />
-                        <Select options={[{ value: "To Do", label: "To Do" }, { value: "Doing", label: "Doing" }, { value: "Done", label: "Done" }, { value: "Review", label: "Review" }]} label="Status" value={statusNewTask} onChange={(value: string) => setStatusNewTask(value)} />
+                        <Select options={["Baixa", "Média","Alta" ]} label="Prioridade" value={priorityNewTask} onChange={(value: priority | status) => setPriorityNewTask(value)} />
+                        <Select options={["To Do", "Doing", "Done","Review" ]} label="Status" value={statusNewTask} onChange={(value: priority | status) => setStatusNewTask(value)} />
                         <PrimaryMediumButton onClick={() => createNewTask()}>Salvar</PrimaryMediumButton>
+                    </div>
+                </Modal>
+            )}
+            {showModalEdit && (
+                <Modal animation={animation} setShow={setShowModalEdit}>
+                    <div style={{ display: "grid", rowGap: "16px" }}>
+                        <EditableInput onChange={(e) => setSelectedEdit({...selectEdit,description: e.target.value})} value={selectEdit?.description} placeholder="Sem Título" />
+                        <Select options={["Baixa", "Média","Alta" ]} label="Prioridade" value={selectEdit.priority} onChange={(value: any) => setSelectedEdit({...selectEdit,priority: value})} />
+                        <Select options={["To Do", "Doing", "Done","Review" ]} label="Status" value={selectEdit.status} onChange={(value: any) => setSelectedEdit({...selectEdit,status: value})} />
+                        <PrimaryMediumButton onClick={() => updateTask()}>Salvar</PrimaryMediumButton>
                     </div>
                 </Modal>
             )}

@@ -19,7 +19,8 @@ export interface TaskI {
     setCardDown: any,
     cardDown: any,
     onDragStart: (id: number) => void,
-    onDelete: () => void
+    onDelete: () => void,
+    onClick: () => void
 }
 
 export default function Task(props: TaskI) {
@@ -31,7 +32,7 @@ export default function Task(props: TaskI) {
     }
 
     return (
-        <Container draggable="true" onDragStart={() => props.onDragStart(props.id)} id={`card-${props.id}`} >
+        <Container draggable="true" onDragStart={() => props.onDragStart(props.id)} id={`card-${props.id}`} onClick={() => props.onClick()}>
             <Title>
                 {props.title}
                 <Options onClick={() => showOptionHandle()}>

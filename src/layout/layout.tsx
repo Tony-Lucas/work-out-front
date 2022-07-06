@@ -81,6 +81,10 @@ export const MobileContainer: React.FunctionComponent<MobileContainerI> = ({
 const ContainerMobile = styled.div`
     display:grid;
     row-gap: 24px;
+
+    @media screen and (min-width: 1024px){
+        display:none;
+    }
 `
 
 const ChildrenContainer = styled.div`

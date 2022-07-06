@@ -106,7 +106,7 @@ export const EditableInput: React.FunctionComponent<InputI> = ({ label,
     id,
     value,}: InputI) =>{
         return(
-            <Editable value={value}/>
+            <Editable value={value} onChange={(e) => onChange(e)} placeholder={placeholder}/>
         )
 }
 

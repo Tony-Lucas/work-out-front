@@ -1,19 +1,20 @@
-import React, { ReactNode, useState } from "react"
+import React, { Dispatch, ReactNode, SetStateAction, useState } from "react"
 import Styles from "../../styles.json"
 import styled, {keyframes} from "styled-components"
 import { CloseIcon } from "../../assets/icons/Icons";
 
 interface IModal{
     children?: ReactNode;
-    animation: string
+    animation: string,
+    setShow: Dispatch<SetStateAction<boolean>>
 }
 
 export default function Modal(props: IModal){
     return(
         <Container>
-            <Background animation={props.animation}/>
+            <Background animation={props.animation} onClick={() => props.setShow(false)}/>
             <Main animation={props.animation}>
-                <CloseButton>
+                <CloseButton onClick={() => props.setShow(false)}>
                     <CloseIcon/>
                 </CloseButton>  
                 {props.children}
@@ -61,7 +62,7 @@ const SlideOut = keyframes`
 `
 
 const Background = styled.div<{animation: string}>`
- background-color: rgba(251,251,251,0.6);
+ background-color: rgba(190,194,197,0.6);
  position: absolute;
  opacity: 0.3;
  width: 100vw;
@@ -84,7 +85,7 @@ const Container = styled.div`
 `
 
 const Main = styled.div<{animation: string}>`
-    background-color: red;
+    background-color: white;
     position: relative;
     border-radius: 5px;
     padding: 32px;

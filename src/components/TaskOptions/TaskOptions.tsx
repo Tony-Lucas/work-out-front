@@ -1,10 +1,11 @@
-import React, { useState } from "react"
+import React, { MouseEvent, useState } from "react"
 import Styles from "../../styles.json"
 import styled from "styled-components"
 import { PencilIcon, TrashIcon } from "../../assets/icons/Icons"
 
 interface ITaskOptions{
-    visible: boolean
+    visible: boolean,
+    onDelete: () => void
 }
 
 export default function TaskOptions(props: ITaskOptions){
@@ -18,7 +19,7 @@ export default function TaskOptions(props: ITaskOptions){
                     <PencilIcon width="24" height="24"/>
                     <Option>Renomear</Option>
                 </ContainerOption>
-                <ContainerOption border={true}>
+                <ContainerOption border={true} onClick={() => props.onDelete()}>
                     <TrashIcon width="24" height="24"/>
                     <Option>Deletar</Option>
                 </ContainerOption>

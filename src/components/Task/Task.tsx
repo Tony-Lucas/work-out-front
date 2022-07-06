@@ -6,7 +6,7 @@ import Avatar from "../Avatar/Avatar";
 import TaskOptions from "../TaskOptions/TaskOptions";
 import 'react-loading-skeleton/dist/skeleton.css'
 
-import { useSpring,animated } from "react-spring";
+import { useSpring, animated } from "react-spring";
 import { useDrag } from "@use-gesture/react";
 export interface TaskI {
     title?: string;
@@ -18,7 +18,8 @@ export interface TaskI {
     id: number,
     setCardDown: any,
     cardDown: any,
-    onDragStart: (id: number) => void 
+    onDragStart: (id: number) => void,
+    onDelete: () => void
 }
 
 export default function Task(props: TaskI) {
@@ -30,12 +31,12 @@ export default function Task(props: TaskI) {
     }
 
     return (
-        <Container draggable="true" onDragStart={props.onDragStart(props.id)} id={`card-${props.id}`}>
+        <Container draggable="true" onDragStart={() => props.onDragStart(props.id)} id={`card-${props.id}`} >
             <Title>
                 {props.title}
                 <Options onClick={() => showOptionHandle()}>
                     <OptionsIcon />
-                    <TaskOptions visible={showOption} />
+                    <TaskOptions visible={showOption} onDelete={() => props.onDelete()}/>
                 </Options>
             </Title>
             <Body>

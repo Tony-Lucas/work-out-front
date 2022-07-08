@@ -2,6 +2,7 @@ export interface IUser{
     id: number;
     name: string;
     email: string;
+    imgUrl: string
 }
 export interface ITask{
     id: number,
@@ -11,4 +12,32 @@ export interface ITask{
     createdAt: string,
     updatedAt: string,
     userId: number
+}
+
+export interface IProject{
+    id: number,
+    name: string,
+    createdAt: string,
+    updatedAt: string,
+    owner: number,
+}
+
+export interface IProjectTasks{
+    id: number,
+    description: string,
+    priority: "Baixa" | "Média" | "Alta",
+    status: "To Do" | "Doing" | "Done" | "Review",
+    createdBy: number,
+    lastUpdateBy: number,
+    createdAt: string,
+    updatedAt: string,
+    projectId: number
+}
+
+export interface IUserProjects{
+    id: number,
+    userId: number,
+    projectId: number,
+    createdAt: string,
+    updatedAt: string,
 }

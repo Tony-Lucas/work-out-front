@@ -42,7 +42,7 @@ export default function Task(props: TaskI) {
             </Title>
             <Body>
                 <Perfil>
-                    <Avatar foto={props.foto} />
+                    <Avatar url={props.foto} />
                     <Nome>
                         {props.usuario}
                     </Nome>

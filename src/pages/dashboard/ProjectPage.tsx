@@ -9,28 +9,30 @@ import Task, { TaskI } from "../../components/Task/Task"
 import Modal from "../../components/Modal/Modal"
 import { priority, Select, status } from "../../components/Select/Select"
 import axios from '../../axios/axios';
-import { ITask, IUser } from "../../interfaces/interface"
+import { IProject, ITask, IUser } from "../../interfaces/interface"
+import { Params, useParams } from "react-router-dom"
 
-interface IMyTasks {
+interface IProjectPage {
     user: IUser;
 }
 
-export default function MyTasks({ user }: IMyTasks) {
+export default function ProjectPage({ user }: IProjectPage) {
 
     useEffect(() => {
-        if(user.id !== 0){
-            axios.get(`/task/all/${user.id}`)
-            .then(result => {
-                setTasks(result.data.tasks)
-            })
-        }
-    }, [user.id !== 0])
+        
+            axios.get(`/user-project/name/${params.projectName}`)
+                .then(result => {
+                    setProject(result.data.project)
+                })
+        
+    }, [window.location.pathname])
 
     const [tasks, setTasks] = useState<ITask[]>([])
+    const [project, setProject] = useState<IProject>()
     const [showModal, setShowModal] = useState<boolean>(false)
-    const [showModalEdit,setShowModalEdit] = useState(false)
-    const [showModalProject,setShowModalProject] = useState(false)
-    const [selectEdit,setSelectedEdit] = useState<ITask>({id: 0,description: "",priority:"Baixa",status:"To Do",userId: user.id,createdAt:"",updatedAt:""})
+    const [showModalEdit, setShowModalEdit] = useState(false)
+    const [showModalProject, setShowModalProject] = useState(false)
+    const [selectEdit, setSelectedEdit] = useState<ITask>({ id: 0, description: "", priority: "Baixa", status: "To Do", userId: user.id, createdAt: "", updatedAt: "" })
     const [animation, setAnimation] = useState<string>('slide-in')
     const [taskIsDragging, setTaskIsDragging] = useState<number>(0)
     const [cardDown, setCardDown] = useState<any>()
@@ -39,7 +41,9 @@ export default function MyTasks({ user }: IMyTasks) {
     const [priorityNewTask, setPriorityNewTask] = useState<priority | status>("Baixa")
     const [statusNewTask, setStatusNewTask] = useState<status | priority>("To Do")
 
-    const [projectName,setProjectName] = useState<string>("")
+    const [projectName, setProjectName] = useState<string>("")
+
+    const params: Params = useParams();
 
     const onDragStart = (id: number) => {
         setTaskIsDragging(id)
@@ -57,17 +61,17 @@ export default function MyTasks({ user }: IMyTasks) {
 
     }
 
-    const onDropCard = (e: any,status: string,id: number) => {
+    const onDropCard = (e: any, status: string, id: number) => {
         e.preventDefault()
         const data = e.dataTransfer.getData("text")
-        axios.put(`/task`,{status: status,id: id}).then(result => {
+        axios.put(`/task`, { status: status, id: id }).then(result => {
             console.log(result)
         })
     }
 
     const createNewTask = (): void => {
         if (titleNewTask && priorityNewTask && statusNewTask) {
-            axios.post(`/task`, { description: titleNewTask, priority: priorityNewTask, status: statusNewTask,userId: user.id }).then(result => {
+            axios.post(`/task`, { description: titleNewTask, priority: priorityNewTask, status: statusNewTask, userId: user.id }).then(result => {
                 console.log(result)
             })
         }
@@ -75,7 +79,7 @@ export default function MyTasks({ user }: IMyTasks) {
 
     const updateTask = (): void => {
         if (selectEdit) {
-            axios.put(`/task`, {...selectEdit}).then(result => {
+            axios.put(`/task`, { ...selectEdit }).then(result => {
                 console.log(result)
             })
         }
@@ -91,72 +95,76 @@ export default function MyTasks({ user }: IMyTasks) {
         axios.get(`/task/${id}`).then(result => {
             setSelectedEdit(result.data.task)
             setShowModalEdit(true)
-        }) 
+        })
     }
 
     const createProject = async () => {
-        const result = await axios.post(`/project`,{name: projectName,owner: user.id});
+        const result = await axios.post(`/project`, { name: projectName, owner: user.id });
         const json = await result.data;
-        const Resultd = await axios.post(`/user-project`,{userId: user.id,projectId: result.data.project.id})
+        const Resultd = await axios.post(`/user-project`, { userId: user.id, projectId: result.data.project.id })
         const jsonD = await Resultd.data
+    }
+
+    const insertMember = async () => {
+
     }
 
     return (
         <>
-            <DesktopContainer title="My tasks" createProject={() => setShowModalProject(true)} user={user}>
+            <DesktopContainer title={params.projectName} createProject={() => setShowModalProject(true)} user={user}>
                 <BodyContainer>
                     <ToolContainer>
                         <SearchInput onChange={() => null} />
                         <ButtonSmallIcon onClick={() => setShowModal(true)}>Nova Tarefa</ButtonSmallIcon>
                     </ToolContainer>
                     <TasksContainer>
-                        <TaskColumn onDragOver={(e: DragEvent<HTMLDivElement>) => onDragOver(e)} onDragLeave={(e: DragEvent<HTMLDivElement>) => onDragLeave(e)} onDrop={(e: any) => onDropCard(e,"To Do",taskIsDragging)}>
+                        <TaskColumn onDragOver={(e: DragEvent<HTMLDivElement>) => onDragOver(e)} onDragLeave={(e: DragEvent<HTMLDivElement>) => onDragLeave(e)} onDrop={(e: any) => onDropCard(e, "To Do", taskIsDragging)}>
                             <TitleColumn>To Do</TitleColumn>
                             <NewTask onClick={() => setShowModal(true)}><PlusIcon width="20" height="20" color={Styles["Primary-500"].value} />Nova Tafera</NewTask>
                             {tasks.map((task, index) => {
                                 return (
                                     <>
                                         {task.status === "To Do" && (
-                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)}/>
+                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)} />
                                         )}
                                     </>
                                 )
                             })}
                         </TaskColumn>
-                        <TaskColumn onDragOver={(e: DragEvent<HTMLDivElement>) => onDragOver(e)} onDrop={(e: any) => onDropCard(e,"Doing",taskIsDragging)} onDragLeave={(e: DragEvent<HTMLDivElement>) => onDragLeave(e)}>
+                        <TaskColumn onDragOver={(e: DragEvent<HTMLDivElement>) => onDragOver(e)} onDrop={(e: any) => onDropCard(e, "Doing", taskIsDragging)} onDragLeave={(e: DragEvent<HTMLDivElement>) => onDragLeave(e)}>
                             <TitleColumn>Doing</TitleColumn>
                             <NewTask onClick={() => setShowModal(true)}><PlusIcon width="20" height="20" color={Styles["Primary-500"].value} /> Nova Tafera</NewTask>
                             {tasks.map((task, index) => {
                                 return (
                                     <>
                                         {task.status === "Doing" && (
-                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)}/>
+                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)} />
                                         )}
                                     </>
                                 )
                             })}
                         </TaskColumn>
-                        <TaskColumn onDragOver={(e: DragEvent<HTMLDivElement>) => onDragOver(e)} onDragLeave={(e: DragEvent<HTMLDivElement>) => onDragLeave(e)} onDrop={(e: any) => onDropCard(e,"Done",taskIsDragging)}>
+                        <TaskColumn onDragOver={(e: DragEvent<HTMLDivElement>) => onDragOver(e)} onDragLeave={(e: DragEvent<HTMLDivElement>) => onDragLeave(e)} onDrop={(e: any) => onDropCard(e, "Done", taskIsDragging)}>
                             <TitleColumn>Done</TitleColumn>
                             <NewTask onClick={() => setShowModal(true)}><PlusIcon width="20" height="20" color={Styles["Primary-500"].value} /> Nova Tafera</NewTask>
                             {tasks.map((task, index) => {
                                 return (
                                     <>
                                         {task.status === "Done" && (
-                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)}/>
+                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)} />
                                         )}
                                     </>
                                 )
                             })}
                         </TaskColumn>
-                        <TaskColumn onDragOver={(e: DragEvent<HTMLDivElement>) => onDragOver(e)} onDragLeave={(e: DragEvent<HTMLDivElement>) => onDragLeave(e)} onDrop={(e: any) => onDropCard(e,"Review",taskIsDragging)}>
+                        <TaskColumn onDragOver={(e: DragEvent<HTMLDivElement>) => onDragOver(e)} onDragLeave={(e: DragEvent<HTMLDivElement>) => onDragLeave(e)} onDrop={(e: any) => onDropCard(e, "Review", taskIsDragging)}>
                             <TitleColumn>Review</TitleColumn>
                             <NewTask onClick={() => setShowModal(true)}><PlusIcon width="20" height="20" color={Styles["Primary-500"].value} /> Nova Tafera</NewTask>
                             {tasks.map((task, index) => {
                                 return (
                                     <>
                                         {task.status === "Review" && (
-                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)}/>
+                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)} />
                                         )}
                                     </>
                                 )
@@ -174,7 +182,7 @@ export default function MyTasks({ user }: IMyTasks) {
                         <TaskColumn>
                             <TitleColumn>To Do</TitleColumn>
                             <NewTask><PlusIcon width="20" height="20" color={Styles["Primary-500"].value} />Nova Tafera</NewTask>
-                            
+
                         </TaskColumn>
                     </TasksContainer>
                 </BodyContainer>
@@ -183,8 +191,8 @@ export default function MyTasks({ user }: IMyTasks) {
                 <Modal animation={animation} setShow={setShowModal}>
                     <div style={{ display: "grid", rowGap: "16px" }}>
                         <EditableInput onChange={(e) => setTitleNewTask(e.target.value)} value={titleNewTask} placeholder="Sem Título" />
-                        <Select options={["Baixa", "Média","Alta" ]} label="Prioridade" value={priorityNewTask} onChange={(value: priority | status) => setPriorityNewTask(value)} />
-                        <Select options={["To Do", "Doing", "Done","Review" ]} label="Status" value={statusNewTask} onChange={(value: priority | status) => setStatusNewTask(value)} />
+                        <Select options={["Baixa", "Média", "Alta"]} label="Prioridade" value={priorityNewTask} onChange={(value: priority | status) => setPriorityNewTask(value)} />
+                        <Select options={["To Do", "Doing", "Done", "Review"]} label="Status" value={statusNewTask} onChange={(value: priority | status) => setStatusNewTask(value)} />
                         <PrimaryMediumButton onClick={() => createNewTask()}>Salvar</PrimaryMediumButton>
                     </div>
                 </Modal>
@@ -192,20 +200,20 @@ export default function MyTasks({ user }: IMyTasks) {
             {showModalEdit && (
                 <Modal animation={animation} setShow={setShowModalEdit}>
                     <div style={{ display: "grid", rowGap: "16px" }}>
-                        <EditableInput onChange={(e) => setSelectedEdit({...selectEdit,description: e.target.value})} value={selectEdit?.description} placeholder="Sem Título" />
-                        <Select options={["Baixa", "Média","Alta" ]} label="Prioridade" value={selectEdit.priority} onChange={(value: any) => setSelectedEdit({...selectEdit,priority: value})} />
-                        <Select options={["To Do", "Doing", "Done","Review" ]} label="Status" value={selectEdit.status} onChange={(value: any) => setSelectedEdit({...selectEdit,status: value})} />
+                        <EditableInput onChange={(e) => setSelectedEdit({ ...selectEdit, description: e.target.value })} value={selectEdit?.description} placeholder="Sem Título" />
+                        <Select options={["Baixa", "Média", "Alta"]} label="Prioridade" value={selectEdit.priority} onChange={(value: any) => setSelectedEdit({ ...selectEdit, priority: value })} />
+                        <Select options={["To Do", "Doing", "Done", "Review"]} label="Status" value={selectEdit.status} onChange={(value: any) => setSelectedEdit({ ...selectEdit, status: value })} />
                         <PrimaryMediumButton onClick={() => updateTask()}>Salvar</PrimaryMediumButton>
                     </div>
                 </Modal>
             )}
             {showModalProject && (
-                 <Modal animation={animation} setShow={setShowModalProject}>
-                 <div style={{ display: "grid", rowGap: "16px" }}>
-                     <Input onChange={(e) => setProjectName(e.target.value)} label="Nome"/>
-                     <PrimaryMediumButton onClick={() => createProject()}>Salvar</PrimaryMediumButton>
-                 </div>
-             </Modal>
+                <Modal animation={animation} setShow={setShowModalProject}>
+                    <div style={{ display: "grid", rowGap: "16px" }}>
+                        <Input onChange={(e) => setProjectName(e.target.value)} label="Nome" />
+                        <PrimaryMediumButton onClick={() => createProject()}>Salvar</PrimaryMediumButton>
+                    </div>
+                </Modal>
             )}
         </>
     )

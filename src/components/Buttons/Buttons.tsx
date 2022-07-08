@@ -118,6 +118,7 @@ export const ButtonSmallIcon: React.FunctionComponent<ButtonI> = ({
 
 const ButtonIconSmallElement = styled.button`
     display:grid;
+    position: relative;
     grid-template-columns: fit-content(100%) fit-content(100%);
     column-gap: 4px;
     height: 32px;

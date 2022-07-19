@@ -1,4 +1,4 @@
-import React, { DragEvent, useEffect, useState } from "react"
+import React, { Dispatch, DragEvent, SetStateAction, useEffect, useState } from "react"
 import { BodyContainer, DesktopContainer, MobileContainer } from "../../layout/layout"
 import styled from "styled-components"
 import { EditableInput, Input, SearchInput } from "../../components/Inputs/Inputs"
@@ -9,14 +9,14 @@ import Task, { TaskI } from "../../components/Task/Task"
 import Modal from "../../components/Modal/Modal"
 import { priority, Select, status } from "../../components/Select/Select"
 import axios from '../../axios/axios';
-import { IProject, ITask, IUser } from "../../interfaces/interface"
+import { DefaultI, IProject, ITask, IUser } from "../../interfaces/interface"
 import { Params, useParams } from "react-router-dom"
 
-interface IProjectPage {
+interface IProjectPage extends DefaultI {
     user: IUser;
 }
 
-export default function ProjectPage({ user }: IProjectPage) {
+export default function ProjectPage({ user,setUser }: IProjectPage ) {
 
     useEffect(() => {
         
@@ -111,7 +111,7 @@ export default function ProjectPage({ user }: IProjectPage) {
 
     return (
         <>
-            <DesktopContainer title={params.projectName} createProject={() => setShowModalProject(true)} user={user}>
+            <DesktopContainer title={params.projectName} createProject={() => setShowModalProject(true)} user={user} setUser={setUser}>
                 <BodyContainer>
                     <ToolContainer>
                         <SearchInput onChange={() => null} />

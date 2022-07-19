@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react"
+import React, { ChangeEvent, MouseEvent, useEffect, useState } from "react"
 import styled from "styled-components"
 import { SearchIcon } from "../../assets/icons/Icons"
 import Styles from "../../styles.json"
@@ -71,7 +71,7 @@ export const SearchInput: React.FunctionComponent<InputI> = ({
 }: InputI) => {
     return (
         <ContainerSearchInput>
-            <SearchIcon color={Styles["Gray-500"].value}/>
+            <SearchIcon color={Styles["Gray-500"].value} />
             <InputSearch value={value} id={id} type={type || "text"} onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e)} />
         </ContainerSearchInput>
     )
@@ -104,10 +104,10 @@ export const EditableInput: React.FunctionComponent<InputI> = ({ label,
     type,
     onChange,
     id,
-    value,}: InputI) =>{
-        return(
-            <Editable value={value} onChange={(e) => onChange(e)} placeholder={placeholder}/>
-        )
+    value, }: InputI) => {
+    return (
+        <Editable value={value} onChange={(e) => onChange(e)} placeholder={placeholder} />
+    )
 }
 
 const Editable = styled.input`
@@ -118,4 +118,37 @@ const Editable = styled.input`
     border: none;
     outline: none;
     padding: 0;
+`
+
+export const ProfileImageInput: React.FunctionComponent<any> = (props: any) => {
+
+    const [tempImgUrl, setTempImgUrl] = useState<any>(props.imgUrl)
+
+    const onChange = (e: any): void => {
+        props.setUserData({ ...props.userData, img: e.target.files[0] })
+        const urlTemp = URL.createObjectURL(e.target.files[0])
+        setTempImgUrl(urlTemp)
+    }
+
+    return (
+        <>
+            <LabelImage id="myLabel" htmlFor="image-input" properties={props} tempImgUrl={tempImgUrl} />
+            <ImageInput id="image-input" onChange={(e: any) => onChange(e)} />
+        </>
+    )
+}
+
+const ImageInput = styled.input.attrs({ type: "file" })`
+    display:none;
+`
+
+const LabelImage = styled.label<{ properties: any, tempImgUrl: string }>`
+    background-image: url(${props => props.tempImgUrl || "https://www.fiscalti.com.br/wp-content/uploads/2021/02/default-user-image.png"});
+    background-position:center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: ${props => props.properties.width}px;
+    height: ${props => props.properties.height}px;
+    border-radius: 500px;
+    cursor: pointer;
 `

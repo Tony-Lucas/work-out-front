@@ -1,4 +1,4 @@
-import React, { DragEvent, useEffect, useState } from "react"
+import React, { Dispatch, DragEvent, SetStateAction, useEffect, useState } from "react"
 import { BodyContainer, DesktopContainer, MobileContainer } from "../../layout/layout"
 import styled from "styled-components"
 import { EditableInput, Input, SearchInput } from "../../components/Inputs/Inputs"
@@ -9,13 +9,14 @@ import Task, { TaskI } from "../../components/Task/Task"
 import Modal from "../../components/Modal/Modal"
 import { priority, Select, status } from "../../components/Select/Select"
 import axios from '../../axios/axios';
-import { ITask, IUser } from "../../interfaces/interface"
+import { DefaultI, ITask, IUser } from "../../interfaces/interface"
+import Avatar from "../../components/Avatar/Avatar"
 
-interface IMyTasks {
+interface IMyTasks extends DefaultI {
     user: IUser;
 }
 
-export default function MyTasks({ user }: IMyTasks) {
+export default function MyTasks({ user,setUser }: IMyTasks) {
 
     useEffect(() => {
         if(user.id !== 0){
@@ -28,8 +29,9 @@ export default function MyTasks({ user }: IMyTasks) {
 
     const [tasks, setTasks] = useState<ITask[]>([])
     const [showModal, setShowModal] = useState<boolean>(false)
-    const [showModalEdit,setShowModalEdit] = useState(false)
-    const [showModalProject,setShowModalProject] = useState(false)
+    const [showModalEdit,setShowModalEdit] = useState<boolean>(false)
+    const [showModalProject,setShowModalProject] = useState<boolean>(false)
+    const [showModalProfile,setShowModalProfile] = useState<boolean>(false)
     const [selectEdit,setSelectedEdit] = useState<ITask>({id: 0,description: "",priority:"Baixa",status:"To Do",userId: user.id,createdAt:"",updatedAt:""})
     const [animation, setAnimation] = useState<string>('slide-in')
     const [taskIsDragging, setTaskIsDragging] = useState<number>(0)
@@ -103,7 +105,7 @@ export default function MyTasks({ user }: IMyTasks) {
 
     return (
         <>
-            <DesktopContainer title="My tasks" createProject={() => setShowModalProject(true)} user={user}>
+            <DesktopContainer title="My tasks" createProject={() => setShowModalProject(true)} user={user} setUser={setUser}>
                 <BodyContainer>
                     <ToolContainer>
                         <SearchInput onChange={() => null} />
@@ -207,6 +209,7 @@ export default function MyTasks({ user }: IMyTasks) {
                  </div>
              </Modal>
             )}
+            
         </>
     )
 }

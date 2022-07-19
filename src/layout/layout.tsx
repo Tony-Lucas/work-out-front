@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
 import styled from "styled-components"
 import DrawerMenu from "../components/DrawerMenu/DrawerMenu"
 import Header, { HeaderI } from "../components/Header/Header"
@@ -9,14 +9,16 @@ import { IProject, IUser } from "../interfaces/interface"
 interface DesktopContainerI extends HeaderI {
     children: React.ReactNode,
     createProject: () => void,
-    user: IUser
+    user: IUser,
+    setUser: Dispatch<SetStateAction<any>>;
 }
 
 export const DesktopContainer: React.FunctionComponent<DesktopContainerI> = ({
     children,
     title,
     createProject,
-    user
+    user,
+    setUser
 }: DesktopContainerI) => {
 
     const [projects,setProjects] = useState<IProject[]>([])
@@ -34,7 +36,7 @@ export const DesktopContainer: React.FunctionComponent<DesktopContainerI> = ({
 
     return (
         <ContainerDesktop>
-            <SidebarMenu createProject={createProject} projects={projects} user={user}/>
+            <SidebarMenu createProject={createProject} projects={projects} user={user} setUser={setUser}/>
             <Main>
                 <Header title={title} />
                 {children}

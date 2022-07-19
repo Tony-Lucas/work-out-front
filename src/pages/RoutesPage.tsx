@@ -9,7 +9,7 @@ import ProjectPage from "./dashboard/ProjectPage"
 
 export default function RoutesPage() {
 
-    const [user, setUser] = useState<IUser>({id: 0, name: '', email: '',imgUrl:""});
+    const [user, setUser] = useState<IUser>({id: 0, name: '', email: '',imgUrl:''});
 
     const navigate = useNavigate()
 
@@ -34,8 +34,8 @@ export default function RoutesPage() {
             
             <Routes>
                 <Route path="/" element={<Login />} />
-                <Route path="/dashboard/mytasks" element={<MyTasks user={user}/>} />
-                <Route path="/dashboard/:projectName" element={<ProjectPage user={user}/>} />
+                <Route path="/dashboard/mytasks" element={<MyTasks user={user} setUser={setUser}/>} />
+                <Route path="/dashboard/:projectName" element={<ProjectPage user={user} setUser={setUser}/>} />
             </Routes>
         </>
     )

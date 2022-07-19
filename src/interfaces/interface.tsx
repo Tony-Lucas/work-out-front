@@ -1,3 +1,9 @@
+import { Dispatch, SetStateAction } from "react";
+
+export interface DefaultI{
+    setUser: Dispatch<SetStateAction<any>>;
+}
+
 export interface IUser{
     id: number;
     name: string;

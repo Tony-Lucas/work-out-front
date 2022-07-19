@@ -125,7 +125,7 @@ export default function ProjectPage({ user,setUser }: IProjectPage ) {
                                 return (
                                     <>
                                         {task.status === "To Do" && (
-                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)} />
+                                            <Task priority={task.priority} title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)} />
                                         )}
                                     </>
                                 )
@@ -138,7 +138,7 @@ export default function ProjectPage({ user,setUser }: IProjectPage ) {
                                 return (
                                     <>
                                         {task.status === "Doing" && (
-                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)} />
+                                            <Task priority={task.priority} title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)} />
                                         )}
                                     </>
                                 )
@@ -151,7 +151,7 @@ export default function ProjectPage({ user,setUser }: IProjectPage ) {
                                 return (
                                     <>
                                         {task.status === "Done" && (
-                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)} />
+                                            <Task priority={task.priority} title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)} />
                                         )}
                                     </>
                                 )
@@ -164,7 +164,7 @@ export default function ProjectPage({ user,setUser }: IProjectPage ) {
                                 return (
                                     <>
                                         {task.status === "Review" && (
-                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)} />
+                                            <Task priority={task.priority} title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)} />
                                         )}
                                     </>
                                 )

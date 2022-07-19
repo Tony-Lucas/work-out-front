@@ -10,10 +10,12 @@ export interface IUser{
     email: string;
     imgUrl: string
 }
+export type priority = "Baixa" | "Média" | "Alta";
+
 export interface ITask{
     id: number,
     description: string,
-    priority: "Baixa" | "Média" | "Alta",
+    priority: priority,
     status: "To Do" | "Doing" | "Done" | "Review",
     createdAt: string,
     updatedAt: string,

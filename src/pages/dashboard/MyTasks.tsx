@@ -16,6 +16,7 @@ interface IMyTasks extends DefaultI {
     user: IUser;
 }
 
+
 export default function MyTasks({ user,setUser }: IMyTasks) {
 
     useEffect(() => {
@@ -23,6 +24,7 @@ export default function MyTasks({ user,setUser }: IMyTasks) {
             axios.get(`/task/all/${user.id}`)
             .then(result => {
                 setTasks(result.data.tasks)
+                console.log(result.data)
             })
         }
     }, [user.id !== 0])
@@ -119,7 +121,7 @@ export default function MyTasks({ user,setUser }: IMyTasks) {
                                 return (
                                     <>
                                         {task.status === "To Do" && (
-                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)}/>
+                                            <Task priority={task.priority} title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)}/>
                                         )}
                                     </>
                                 )
@@ -132,7 +134,7 @@ export default function MyTasks({ user,setUser }: IMyTasks) {
                                 return (
                                     <>
                                         {task.status === "Doing" && (
-                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)}/>
+                                            <Task priority={task.priority} title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)}/>
                                         )}
                                     </>
                                 )
@@ -145,7 +147,7 @@ export default function MyTasks({ user,setUser }: IMyTasks) {
                                 return (
                                     <>
                                         {task.status === "Done" && (
-                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)}/>
+                                            <Task priority={task.priority} title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)}/>
                                         )}
                                     </>
                                 )
@@ -158,7 +160,7 @@ export default function MyTasks({ user,setUser }: IMyTasks) {
                                 return (
                                     <>
                                         {task.status === "Review" && (
-                                            <Task title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)}/>
+                                            <Task priority={task.priority} title={task.description} id={task.id} setCardDown={setCardDown} cardDown={cardDown} onDragStart={onDragStart} onDelete={() => onDelete(task.id)} onClick={() => toggleModalEdit(task.id)}/>
                                         )}
                                     </>
                                 )

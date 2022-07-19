@@ -8,8 +8,11 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 import { useSpring, animated } from "react-spring";
 import { useDrag } from "@use-gesture/react";
+import { ITask, priority } from "../../interfaces/interface";
 export interface TaskI {
     title?: string;
+    created?: string;
+    priority: priority;
     foto?: string;
     usuario?: string;
     contagem?: number;
@@ -31,26 +34,35 @@ export default function Task(props: TaskI) {
         setShowOption(!showOption)
     }
 
+    function setColor(priority: priority){
+        if(priority === 'Baixa'){
+            return Styles["Primary-500"].value
+        }else if(priority === 'Média'){
+            return Styles["Secondary-500"].value
+        }else{
+            return Styles["Danger-500"].value
+        }
+    }
+
     return (
-        <Container draggable="true" onDragStart={() => props.onDragStart(props.id)} id={`card-${props.id}`} onClick={() => props.onClick()}>
+        <Container draggable="true" onDragStart={() => props.onDragStart(props.id)} id={`card-${props.id}`}>
             <Title>
-                {props.title}
-                <Options onClick={() => showOptionHandle()}>
+                <Priority color={setColor(props.priority)}/>
+                <span style={{padding: '12px'}} onClick={() => props.onClick()}>
+                    {props.title}
+                </span>
+                <Options id="options" onClick={() => showOptionHandle()}>
                     <OptionsIcon />
                     <TaskOptions visible={showOption} onDelete={() => props.onDelete()}/>
                 </Options>
             </Title>
-            <Body>
-                <Perfil>
-                    <Avatar url={props.foto} />
-                    <Nome>
-                        {props.usuario}
-                    </Nome>
-                </Perfil>
-                <ComentsNumber>
-                    <BalonIcon />
-                    {props.contagem}
-                </ComentsNumber>
+            <Body onClick={()=> props.onClick()}>
+                <Chip>
+                    {props.created || '19 Jul'}
+                </Chip>
+                <Chip color="#E6F1FF">
+                    Front-end
+                </Chip>
             </Body>
         </Container>
     )
@@ -64,6 +76,12 @@ const Container = styled.div`
     cursor: pointer;
     border: 1px solid ${Styles["Gray-100"].value};
     user-select: none;
+    &:hover{
+        #options{
+            opacity: 1;
+            transition: 0.5s;
+        }
+    }
 `
 
 
@@ -71,10 +89,10 @@ const Title = styled.span`
     font-size: 0.75em;
     color: ${Styles.Black.value};
     font-family: Montserrat-Semibold;
-    display: flex;
+    display: grid;
+    grid-template-columns: fit-content(100%) 1fr fit-content(100%);
     align-items: center;
     justify-content: space-between;
-    padding: 12px;
     border-bottom: 1px solid ${Styles["Gray-100"].value};
 `
 const Options = styled.button`
@@ -83,25 +101,28 @@ const Options = styled.button`
     margin: 0;
     padding: 0;
     cursor: pointer;
+    opacity: 0;
+    margin-right: 8px;
 `
 const Body = styled.div`
     padding: 12px;
-`
-const Perfil = styled.div`
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: fit-content(100%) fit-content(100%);
+    gap: 4px;
 `
 
-const Nome = styled.span`
-    font-size: 0.625em;
-    font-family: Montserrat-Regular;
-    color: ${Styles.Black.value};
+const Priority = styled.div<{color: string}>`
+    background-color: ${props => props.color ?? Styles["Primary-500"].value};
+    height: 100%;
+    width: 4px;
+    border-top-left-radius: 4px; 
 `
-const ComentsNumber = styled.span`
-    display: flex;
-    align-items: center;
-    margin-top: 4px;
-    font-size: 0.625em;
+
+const Chip = styled.span<{color?: string}>`
+    background-color: ${props => props.color ?? "#FFF2DC" } ;
     font-family: Montserrat-Regular;
-    color: ${Styles["Gray-500"].value};
+    font-size: 0.5em;
+    border-radius: 8px;
+    color: ${Styles.Black};
+    padding: 4px 12px;
 `
